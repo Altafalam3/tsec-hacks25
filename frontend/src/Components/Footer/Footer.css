@@ -1,12 +1,12 @@
 .footer {
     background: #000;
-    margin-top: 100px;
+    margin-top: 40px;
 }
 
 .footer .footer_top {
-    /* padding-top: 45px;
+    /* padding-top: 20px;
     padding-bottom: 40px; */
-    padding: 45px;
+    padding: 10px;
 }
 
 @media (max-width: 767px) {

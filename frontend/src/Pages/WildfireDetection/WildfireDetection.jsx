@@ -1,5 +1,5 @@
 import "../MainContent.css";
-import Sidebar from "../../Components/Sidebar/Sidebar";
+import "./WildfireDetection.css"
 import React, { useState, useEffect } from "react";
 
 import ImageUpload from "../../Components/ImageUpload/ImageUpload";
@@ -83,7 +83,7 @@ function WildfireDetection() {
 
    return (
       <>
-         <Sidebar />
+         
 
          <div className="main-content">
             <div className="min-h-screen bg-gray-100 p-8 dark:bg-gray-900">
