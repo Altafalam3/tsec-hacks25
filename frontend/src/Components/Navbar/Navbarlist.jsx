@@ -49,6 +49,11 @@ const Navbarlist = () => {
       url:"/live-alert-map",
       cName :"Navlinks",
       icon: faBalanceScale,
+    },
+    {
+      title: 'Report Threat',
+      url:'/report-threat',
+      cName:"Navlinks"
     }
   ];
   return (
