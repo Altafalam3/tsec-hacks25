@@ -1,121 +1,123 @@
 import "../MainContent.css";
 import "./WildfireDetection.css"
 import React, { useState, useEffect } from "react";
+import ImageUpload from "../../Components/ImageUpload/ImageUpload";
 import PredictionResult from "../../Components/PredictionResult/PredictionResult";
 
-const WildfireDetection = () => {
-   const [selectedFile, setSelectedFile] = useState(null);
-   const [previewUrl, setPreviewUrl] = useState("");
-   const [detectedImageUrl, setDetectedImageUrl] = useState("");
-   const [detectedVideoUrl, setDetectedVideoUrl] = useState("");
-   const [predictionText, setPredictionText] = useState("Upload an image or video to detect fire");
+function WildfireDetection() {
+   const [image, setImage] = useState(null);
+   const [predictionText, setPredictionText] = useState("");
+   const [detectedImageUrl, setDetectedImageUrl] = useState(null);
+   const [location, setLocation] = useState({ lat: null, lon: null });
 
-   // Handle File Selection
-   const handleFileChange = (event) => {
-       const file = event.target.files[0];
-       if (file) {
-           setSelectedFile(file);
-           setPreviewUrl(URL.createObjectURL(file));
-       }
+   // Get user's location when the component mounts
+   useEffect(() => {
+      if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(
+            (position) => {
+               setLocation({
+                  lat: position.coords.latitude,
+                  lon: position.coords.longitude,
+               });
+            },
+            (error) => {
+               console.error("Error getting location:", error);
+            }
+         );
+      } else {
+         console.warn("Geolocation is not supported by this browser.");
+      }
+   }, []);
+
+   // Handle image upload and processing
+   const handleImageUpload = (img) => {
+      setImage(img);
+      processImage(img);
    };
 
-   // Handle File Upload & Fire Detection
-   const handleUpload = () => {
-       if (!selectedFile) {
-           setPredictionText("❌ Please select a file first.");
-           return;
-       }
+   // Process the image and detect fire
+   const processImage = (image) => {
+      const formData = new FormData();
+      formData.append("file", image);
 
-       const formData = new FormData();
-       formData.append("file", selectedFile);
+      // Send the image to Flask API for processing
+      fetch("http://localhost:5001/detect/image", {
+         method: "POST",
+         body: formData,
+      })
+         .then((response) => response.json())
+         .then((data) => {
+            console.log(data);
+            if (data.message === "Detection completed") {
+               setPredictionText(
+                  data.detected_objects && data.detected_objects !== "No fire / smoke detected"
+                     ? `🔥 Detected: ${JSON.stringify(data.detected_objects)} at coordinates: Latitude ${location.lat}, Longitude ${location.lon}`
+                     : "✅ No fire detected."
+               );
 
-       const isVideo = selectedFile.type.startsWith("video");
-       setPredictionText("🔍 Processing...");
-
-       fetch(`http://localhost:5001/detect/${isVideo ? "video" : "image"}`, {
-           method: "POST",
-           body: formData,
-       })
-           .then((response) => response.json())
-           .then((data) => {
-               console.log(data);
-               if (data.message === "Video processing completed" || data.message === "Detection completed") {
-                   setPredictionText(
-                       data.detected_objects && data.detected_objects !== "No fire / smoke detected"
-                           ? `🔥 Detected: ${JSON.stringify(data.detected_objects)}`
-                           : "✅ No fire detected."
-                   );
-
-                   if (isVideo) {
-                       setDetectedVideoUrl(data.video_url); // Set processed video from Cloudinary
-                       setDetectedImageUrl(""); // Clear image
-                   } else {
-                       setDetectedImageUrl(data.image_url); // Set processed image from Cloudinary
-                       setDetectedVideoUrl(""); // Clear video
-                   }
-               } else {
-                   setPredictionText("✅ No fire detected.");
-               }
-           })
-           .catch((error) => {
-               console.error("Error:", error);
-               setPredictionText("❌ Error in detecting fire.");
-           });
+               setDetectedImageUrl(data.image_url); // Cloudinary URL for processed image
+               // if (data.detected_objects && data.detected_objects !== "No fire / smoke detected") {
+               //    alert(`🔥 Fire detected at coordinates: Latitude ${location.lat}, Longitude ${location.lon}`);
+               // }
+            } else {
+               setPredictionText("✅ No fire detected.");
+            }
+         })
+         .catch((error) => {
+            console.error("Error during image processing:", error);
+            setPredictionText("❌ Error in detecting fire");
+         });
    };
 
    return (
-       <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-           <h1 className="text-3xl font-bold text-gray-900 text-center mb-6">🔥 Wildfire Detection System</h1>
+      <>
+         <div className="main-content">
+            <div className="min-h-screen bg-gray-100 p-8 dark:bg-gray-900">
+               <h1 className="text-4xl font-bold text-center text-blue-600 dark:text-white mb-8">
+                  Wildfire Detection
+               </h1>
+               <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                  <div>
+                     <ImageUpload onImageUpload={handleImageUpload} />
+                  </div>
+                  {image && (
+                     <div className="mt-6 grid grid-cols-2 gap-6">
+                        <div className="text-center">
+                           <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                              Uploaded Image
+                           </h2>
+                           <img
+                              src={URL.createObjectURL(image)}
+                              alt="Uploaded"
+                              className="mx-auto mt-4 max-w-full h-auto rounded-xl shadow-md"
+                           />
+                        </div>
 
-           {/* File Upload Input */}
-           <input type="file" accept="image/*,video/*" onChange={handleFileChange} className="mb-4" />
+                        {detectedImageUrl && (
+                           <div className="text-center">
+                              <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+                                 Detection Result
+                              </h2>
+                              <img
+                                 src={detectedImageUrl} // Cloudinary URL
+                                 alt="Detected"
+                                 className="mx-auto mt-4 max-w-full h-auto rounded-xl shadow-md"
+                              />
+                           </div>
+                        )}
+                     </div>
+                  )}
 
-           {/* Preview Selected Image/Video */}
-           {previewUrl && (
-               <div className="text-center">
-                   <h2 className="text-xl font-semibold text-gray-800">Selected File Preview</h2>
-                   {selectedFile.type.startsWith("video") ? (
-                       <video controls className="mx-auto mt-2 w-full rounded-lg shadow-md">
-                           <source src={previewUrl} type="video/mp4" />
-                           Your browser does not support the video tag.
-                       </video>
-                   ) : (
-                       <img src={previewUrl} alt="Selected Preview" className="mx-auto mt-2 rounded-lg shadow-md w-full h-auto" />
-                   )}
+                  {predictionText && (
+                     <div className="mt-6 text-center">
+                        <PredictionResult text={predictionText} />
+                     </div>
+                  )}
                </div>
-           )}
-
-           {/* Upload & Detect Button */}
-           <button
-               onClick={handleUpload}
-               className="w-full mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-           >
-               🚀 Detect Fire
-           </button>
-
-           {/* Detection Result */}
-           <p className="text-center mt-4 text-lg font-semibold">{predictionText}</p>
-
-           {/* Display Processed Image */}
-           {detectedImageUrl && (
-               <div className="text-center mt-6">
-                   <h2 className="text-2xl font-semibold text-gray-800">🔥 Fire Detection Result (Image)</h2>
-                   <img src={detectedImageUrl} alt="Processed Detection" className="mx-auto mt-4 rounded-lg shadow-md w-full h-auto" />
-               </div>
-           )}
-
-           {/* Display Processed Video */}
-           {detectedVideoUrl && (
-               <div className="text-center mt-6">
-                   <h2 className="text-2xl font-semibold text-gray-800">🔥 Fire Detection Result (Video)</h2>
-                   <video controls className="mx-auto mt-4 w-full rounded-lg shadow-md">
-                       <source src={detectedVideoUrl} type="video/mp4" />
-                       Your browser does not support the video tag.
-                   </video>
-               </div>
-           )}
-       </div>
+            </div>
+         </div>
+      </>
    );
-};
+}
 
 export default WildfireDetection;
