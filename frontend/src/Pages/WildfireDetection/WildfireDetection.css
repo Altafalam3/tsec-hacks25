@@ -1,44 +1,44 @@
 /* Wildfire Detection title styling */
 .title-section {
-    font-size: 2.4rem; /* Reduced size slightly for a cleaner look */
-    font-weight: bold;
-    color: #4B0082; /* Purple color to match the navbar theme */
-    text-align: center;
-    margin-bottom: 1.5rem;
-    text-transform: uppercase;
-  }
-  
-  /* Styling for the image upload section */
-  input[type="file"] {
-    display: inline-block;
-    background-color: #4B0082;
-    color: white;
-    padding: 0.3rem 0.6rem; /* Reduced padding for a smaller button */
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    font-size: 0.9rem; /* Slightly smaller font for button */
-    text-align: center;
-  }
-  
-  input[type="file"]::file-selector-button {
-    background-color: #4B0082;
-    color: white;
-    padding: 0.4rem 0.8rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 0.9rem; /* Smaller font for button consistency */
-  }
-  
-  input[type="file"]::file-selector-button:hover {
-    background-color: #3a0068;
-  }
-  .upload-text {
-    color: #4B0082; /* Purple color for aesthetic alignment */
-    font-size: 1.1rem;
-    font-weight: 500;
-    padding-right: 0.8rem;
-    display: inline-block;
-  }  
+  font-size: 2.4rem; /* Reduced size slightly for a cleaner look */
+  font-weight: bold;
+  color: #4B0082; /* Purple color to match the navbar theme */
+  text-align: center;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+}
+
+/* Styling for the image upload section */
+input[type="file"] {
+  display: inline-block;
+  background-color: #4B0082;
+  color: white;
+  padding: 0.3rem 0.6rem; /* Reduced padding for a smaller button */
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem; /* Slightly smaller font for button */
+  text-align: center;
+}
+
+input[type="file"]::file-selector-button {
+  background-color: #4B0082;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.9rem; /* Smaller font for button consistency */
+}
+
+input[type="file"]::file-selector-button:hover {
+  background-color: #3a0068;
+}
+.upload-text {
+  color: #4B0082; /* Purple color for aesthetic alignment */
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding-right: 0.8rem;
+  display: inline-block;
+}  
