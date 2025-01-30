@@ -1,5 +1,5 @@
 import "../MainContent.css";
-import Sidebar from "../../Components/Sidebar/Sidebar";
+import "./WildfireDetection.css"
 import React, { useState, useEffect } from "react";
 import PredictionResult from "../../Components/PredictionResult/PredictionResult";
 

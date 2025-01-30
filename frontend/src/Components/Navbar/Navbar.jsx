@@ -42,20 +42,14 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="logo-links">
         <h2>
-          <Link to="/" style={{textDecoration:'none', color:'indigo'}}>SmartLegalX</Link>          
+          <Link to="/" style={{textDecoration:'none', color:'indigo'}}>ResQue</Link>          
         </h2>
         <ul className="navitems">
           <Navbarlist />
-          <li>
-
-      <a href="http://localhost:8000" target="_blank" style={{textDecoration:'none',color:'black'}}>Chatbot</a>
-          </li>
-        </ul>
+          </ul>
       </div>
-      <div id="google_translate_element"></div>
-      <button className="login-button">
-        <Link to="/lawyer">For Advocates</Link>
-      </button>
+      
+      
       {renderAuthButton()}
 
     </nav>

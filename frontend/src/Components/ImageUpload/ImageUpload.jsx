@@ -10,7 +10,7 @@ const ImageUpload = ({ onImageUpload }) => {
 
   return (
     <div className="mb-6">
-      <label className="block text-gray-700 dark:text-white mb-2">Upload an image</label>
+      <label className="upload-text">Upload an image</label>
       <input type="file" onChange={handleChange} accept="image/*" className="file-input" />
     </div>
   );

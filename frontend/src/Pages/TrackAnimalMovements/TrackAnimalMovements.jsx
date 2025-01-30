@@ -5,7 +5,7 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 function TrackAnimalMovements() {
   return (
    <>
-   <Sidebar />
+  
 
     <div className="main-content">
       <h1>Track Animal Movements</h1>
