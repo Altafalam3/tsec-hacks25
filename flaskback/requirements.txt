@@ -1,0 +1,5 @@
+ultralytics==8.0.136
+py-cpuinfo
+torch==2.5.0
+torchvision
+flask
