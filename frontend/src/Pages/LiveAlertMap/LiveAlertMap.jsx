@@ -64,7 +64,7 @@ function LiveAlertMap() {
 
    return (
       <>
-         <Sidebar />
+        
          <div className="main-content">
             <h1>Live Alert Map</h1>
             <div className="map-container">
